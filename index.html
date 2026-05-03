@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GWE Launcher — Your Gateway to Gaming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:          #1e1b12;
+    --bg-deep:     #13110b;
+    --bg-card:     #2a2418;
+    --bg-card-h:   #35300a;
+    --border:      #4a3e20;
+    --border-lt:   #6e6040;
+    --gold:        #e8c040;
+    --gold-h:      #f5d050;
+    --gold-dim:    #a08828;
+    --gold-muted:  #7a6420;
+    --text:        #f5e8c0;
+    --text-sub:    #c0a860;
+    --text-dim:    #8a7840;
+    --red:         #f05050;
+    --green:       #50c050;
+    --blue:        #4fa3d4;
+    --purple:      #a080f0;
+    --cyan:        #00e5ff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 60px;
+    background: rgba(19,17,11,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-crosshair { width: 28px; height: 28px; }
+  .nav-crosshair svg { width: 28px; height: 28px; }
+
+  .nav-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    position: relative;
+  }
+  .nav-title::before {
+    content: attr(data-text);
+    position: absolute;
+    left: -2px; top: 1px;
+    color: var(--cyan);
+    opacity: 0.5;
+    animation: glitch-clip 4s infinite;
+  }
+  .nav-title::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 2px; top: -1px;
+    color: #ff2020;
+    opacity: 0.4;
+    animation: glitch-clip2 4s infinite;
+  }
+
+  @keyframes glitch-clip {
+    0%, 90%, 100% { clip-path: none; opacity: 0; }
+    92% { clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); opacity: 0.5; left: -3px; }
+    94% { clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); opacity: 0.5; left: 2px; }
+    96% { clip-path: none; opacity: 0; }
+  }
+  @keyframes glitch-clip2 {
+    0%, 90%, 100% { clip-path: none; opacity: 0; }
+    93% { clip-path: polygon(0 40%, 100% 40%, 100% 60%, 0 60%); opacity: 0.4; left: 3px; }
+    95% { clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); opacity: 0.4; left: -2px; }
+    97% { clip-path: none; opacity: 0; }
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--bg-deep);
+    background: var(--gold);
+    border: none;
+    padding: 8px 22px;
+    cursor: pointer;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--gold-h); transform: scaleX(1.04); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 100px 24px 80px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.15;
+    animation: grid-pan 20s linear infinite;
+  }
+  @keyframes grid-pan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(232,192,64,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold-dim);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+    animation-delay: 0.1s;
+  }
+
+  .hero-logo {
+    position: relative;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+    animation-delay: 0.2s;
+  }
+
+  .crosshair-large { width: 120px; height: 120px; }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 160px);
+    letter-spacing: 6px;
+    line-height: 0.9;
+    text-align: center;
+    color: var(--gold);
+    position: relative;
+    animation: fadeUp 0.8s ease both;
+    animation-delay: 0.3s;
+  }
+  .hero-title .glitch-wrap {
+    display: block;
+    position: relative;
+    color: var(--gold);
+  }
+  .hero-title .glitch-wrap::before {
+    content: attr(data-text);
+    position: absolute; inset: 0;
+    color: var(--cyan); opacity: 0;
+    animation: hero-glitch 6s infinite;
+  }
+  .hero-title .glitch-wrap::after {
+    content: attr(data-text);
+    position: absolute; inset: 0;
+    color: #ff2020; opacity: 0;
+    animation: hero-glitch2 6s infinite;
+  }
+  @keyframes hero-glitch {
+    0%, 85%, 100% { opacity: 0; transform: none; }
+    87% { opacity: 0.5; transform: translate(-4px, 2px); clip-path: polygon(0 20%, 100% 20%, 100% 45%, 0 45%); }
+    89% { opacity: 0; }
+  }
+  @keyframes hero-glitch2 {
+    0%, 85%, 100% { opacity: 0; transform: none; }
+    88% { opacity: 0.4; transform: translate(4px, -2px); clip-path: polygon(0 55%, 100% 55%, 100% 80%, 0 80%); }
+    90% { opacity: 0; }
+  }
+
+  .hero-subtitle {
+    font-size: 18px; font-weight: 300;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--text-sub); margin-top: 16px; text-align: center;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.4s;
+  }
+
+  .hero-desc {
+    max-width: 520px; text-align: center;
+    font-size: 16px; line-height: 1.7; color: var(--text-dim);
+    margin-top: 24px;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.5s;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; margin-top: 48px;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.6s;
+  }
+
+  .btn-primary {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px; letter-spacing: 3px;
+    color: var(--bg-deep); background: var(--gold);
+    border: none; padding: 14px 40px; cursor: pointer;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transition: left 0.4s;
+  }
+  .btn-primary:hover { background: var(--gold-h); transform: translateY(-2px); }
+  .btn-primary:hover::after { left: 150%; }
+
+  .btn-secondary {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px; letter-spacing: 3px;
+    color: var(--gold); background: transparent;
+    border: 1px solid var(--border); padding: 14px 40px;
+    cursor: pointer;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--gold-dim); background: rgba(232,192,64,0.05); }
+
+  .hero-stats {
+    display: flex; gap: 64px; margin-top: 80px;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.7s;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px; color: var(--gold); letter-spacing: 2px; display: block;
+  }
+  .stat-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  section {
+    padding: 100px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 4px;
+    color: var(--gold-dim); text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    letter-spacing: 4px; color: var(--text); line-height: 1; margin-bottom: 16px;
+  }
+  .section-title span { color: var(--gold); }
+
+  .section-desc {
+    font-size: 16px; line-height: 1.7; color: var(--text-dim);
+    max-width: 560px; margin-bottom: 64px;
+  }
+
+  /* APPS GRID */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2px;
+  }
+
+  .app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 32px 24px;
+    position: relative; overflow: hidden;
+    transition: all 0.25s; cursor: crosshair;
+  }
+  .app-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--card-accent, var(--gold));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .app-card:hover { background: var(--bg-card-h); border-color: var(--border-lt); transform: translateY(-4px); }
+  .app-card:hover::before { transform: scaleX(1); }
+
+  .app-card-icon {
+    font-size: 36px; margin-bottom: 16px; display: block;
+    filter: drop-shadow(0 0 8px var(--card-accent, var(--gold)));
+    animation: icon-pulse 3s ease-in-out infinite;
+  }
+  @keyframes icon-pulse {
+    0%, 100% { filter: drop-shadow(0 0 6px var(--card-accent, var(--gold))); }
+    50%       { filter: drop-shadow(0 0 14px var(--card-accent, var(--gold))); }
+  }
+
+  .app-card-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--text); margin-bottom: 8px; }
+  .app-card-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .app-card-tag {
+    position: absolute; top: 12px; right: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 2px;
+    color: var(--card-accent, var(--gold));
+    border: 1px solid currentColor; padding: 2px 6px; opacity: 0.6;
+  }
+
+  /* MC SECTION */
+  .mc-section {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-deep) 100%);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 100px 48px;
+  }
+  .mc-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .mc-window {
+    background: #1a1608; border: 1px solid var(--border-lt);
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(232,192,64,0.1);
+  }
+  .mc-titlebar {
+    background: var(--bg-card); padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border);
+  }
+  .mc-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mc-dot.r { background: var(--red); }
+  .mc-dot.y { background: #ffc832; }
+  .mc-dot.g { background: var(--green); }
+  .mc-titlebar-name { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-left: auto; letter-spacing: 1px; }
+  .mc-body { padding: 20px; }
+  .mc-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .mc-row-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); width: 80px; letter-spacing: 1px; }
+  .mc-select {
+    flex: 1; background: #0e0c06; border: 1px solid var(--border);
+    color: var(--gold); padding: 6px 10px;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    appearance: none; cursor: pointer; outline: none;
+  }
+  .mc-select:focus { border-color: var(--gold-dim); }
+  .mc-launch-btn {
+    width: 100%; margin-top: 8px;
+    background: var(--gold); color: var(--bg-deep); border: none; padding: 12px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px;
+    cursor: pointer; transition: background 0.2s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .mc-launch-btn:hover { background: var(--gold-h); }
+  .mc-console {
+    background: transparent; border: 1px solid var(--border);
+    padding: 12px; margin-top: 12px; height: 80px; overflow: hidden;
+  }
+  .mc-console-line { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); line-height: 1.8; }
+  .mc-console-line .c-gold { color: var(--gold); }
+  .mc-console-line .c-green { color: var(--green); }
+  .mc-console-line .c-blue { color: var(--blue); }
+  .cursor-blink { display: inline-block; width: 6px; height: 10px; background: var(--gold); animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  .mc-visual { position: relative; }
+  .mc-info-panel {
+    position: absolute; top: -12px; right: -12px;
+    background: var(--bg-card); border: 1px solid var(--border-lt);
+    padding: 12px 16px; min-width: 140px;
+  }
+  .mc-info-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--gold-dim); letter-spacing: 2px; margin-bottom: 4px; }
+  .mc-info-val { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--gold); letter-spacing: 1px; }
+
+  /* LOADERS */
+  .loaders-grid { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 48px; }
+  .loader-pill {
+    font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px;
+    padding: 10px 24px; border: 1px solid var(--border); color: var(--text-dim);
+    cursor: pointer; transition: all 0.2s; position: relative;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .loader-pill:hover, .loader-pill.active { background: rgba(232,192,64,0.08); border-color: var(--gold-dim); color: var(--gold); }
+  .loader-pill.active::after { content: '●'; position: absolute; top: -6px; right: 4px; font-size: 8px; color: var(--gold); }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+  }
+  .feature-item {
+    background: var(--bg); padding: 48px 36px;
+    position: relative; overflow: hidden; transition: background 0.2s;
+  }
+  .feature-item:hover { background: var(--bg-card); }
+  .feature-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: var(--border);
+    position: absolute; top: -8px; right: 20px; line-height: 1; letter-spacing: -2px;
+    transition: color 0.2s; pointer-events: none;
+  }
+  .feature-item:hover .feature-num { color: rgba(232,192,64,0.1); }
+  .feature-icon { font-size: 28px; margin-bottom: 20px; display: block; }
+  .feature-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--text); margin-bottom: 12px; }
+  .feature-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+
+  /* MARQUEE */
+  .marquee-section {
+    background: var(--bg-deep); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 24px 0; overflow: hidden;
+  }
+  .marquee-track { display: flex; gap: 0; width: max-content; animation: marquee 30s linear infinite; }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .marquee-item {
+    font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 3px;
+    color: var(--gold-muted); padding: 0 32px; border-right: 1px solid var(--border);
+    white-space: nowrap; transition: color 0.2s;
+  }
+  .marquee-item:hover { color: var(--gold); }
+  .marquee-item .sep { color: var(--border-lt); margin: 0 8px; }
+
+  /* CONSOLE */
+  .console-demo {
+    background: #050401; border: 1px solid var(--border);
+    margin-top: 48px; position: relative; overflow: hidden;
+  }
+  .console-demo::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(232,192,64,0.015) 18px, rgba(232,192,64,0.015) 19px);
+    pointer-events: none;
+  }
+  .console-topbar {
+    background: var(--bg-card); padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px; border-bottom: 1px solid var(--border);
+  }
+  .console-tab {
+    font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px;
+    padding: 4px 12px; cursor: pointer; color: var(--text-dim);
+    transition: color 0.2s; border-bottom: 2px solid transparent;
+  }
+  .console-tab.active { color: var(--gold); border-color: var(--gold); }
+  .console-status {
+    margin-left: auto; display: flex; align-items: center; gap: 8px;
+    font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 2px;
+  }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 6px var(--green); animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--green); } 50% { opacity: 0.6; box-shadow: 0 0 12px var(--green); } }
+  .console-body {
+    padding: 20px 24px; height: 280px; overflow-y: auto;
+    font-family: 'Share Tech Mono', monospace; font-size: 12px; line-height: 2;
+  }
+  .console-body::-webkit-scrollbar { width: 4px; }
+  .console-body::-webkit-scrollbar-thumb { background: var(--border); }
+  .cl { display: flex; gap: 12px; }
+  .cl-time { color: var(--text-dim); min-width: 60px; }
+  .cl-tag { min-width: 60px; text-align: center; }
+  .cl-msg { color: var(--text-sub); }
+  .tag-info { color: var(--blue); }
+  .tag-ok   { color: var(--green); }
+  .tag-warn { color: #ffc832; }
+  .tag-run  { color: var(--gold); }
+
+  /* SETTINGS */
+  .settings-grid {
+    display: grid; grid-template-columns: 240px 1fr;
+    gap: 2px; background: var(--border); margin-top: 48px; min-height: 400px;
+  }
+  .settings-sidebar { background: var(--bg-card); padding: 24px 0; }
+  .settings-nav-item {
+    padding: 12px 24px; font-size: 13px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-dim); cursor: pointer;
+    transition: all 0.2s; border-left: 2px solid transparent;
+  }
+  .settings-nav-item:hover { color: var(--text-sub); border-color: var(--border-lt); }
+  .settings-nav-item.active { color: var(--gold); background: rgba(232,192,64,0.05); border-color: var(--gold); }
+  .settings-content { background: var(--bg); padding: 36px; }
+  .setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 0; border-bottom: 1px solid rgba(74,62,32,0.4);
+  }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-info { flex: 1; }
+  .setting-name { font-size: 15px; font-weight: 600; letter-spacing: 1px; color: var(--text); margin-bottom: 4px; }
+  .setting-hint { font-size: 12px; color: var(--text-dim); }
+  .toggle {
+    width: 44px; height: 22px; background: var(--border); cursor: pointer;
+    position: relative; border: 1px solid var(--border-lt); transition: background 0.2s;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%); flex-shrink: 0;
+  }
+  .toggle.on { background: var(--gold-dim); border-color: var(--gold); }
+  .toggle::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 14px; height: 14px; background: var(--text-dim); transition: all 0.2s;
+  }
+  .toggle.on::after { left: 25px; background: var(--bg-deep); }
+
+  /* PARTNERS */
+  .partners-section {
+    background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-card) 100%);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 100px 48px;
+  }
+  .partners-inner { max-width: 1200px; margin: 0 auto; }
+
+  .partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2px;
+    margin-top: 56px;
+  }
+
+  .partner-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .partner-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--partner-accent, var(--gold));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+  }
+  .partner-card::after {
+    content: attr(data-role);
+    position: absolute; bottom: -2px; right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px; letter-spacing: -2px;
+    color: rgba(232,192,64,0.04); pointer-events: none; line-height: 1;
+  }
+  .partner-card:hover { background: var(--bg-card-h); border-color: var(--border-lt); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .partner-card:hover::before { transform: scaleX(1); }
+
+  .partner-role-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--partner-accent, var(--gold));
+    border: 1px solid currentColor;
+    display: inline-block; padding: 3px 10px; margin-bottom: 24px; opacity: 0.8;
+  }
+
+  .partner-avatar {
+    width: 60px; height: 60px;
+    background: var(--bg-deep);
+    border: 2px solid var(--partner-accent, var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; color: var(--partner-accent, var(--gold));
+    margin-bottom: 20px;
+    position: relative;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%);
+  }
+
+  .partner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 3px;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .partner-name span { color: var(--partner-accent, var(--gold)); }
+
+  .partner-handle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; color: var(--text-dim);
+    letter-spacing: 2px; margin-bottom: 16px;
+  }
+
+  .partner-desc {
+    font-size: 14px; color: var(--text-dim);
+    line-height: 1.7; border-top: 1px solid var(--border);
+    padding-top: 16px; margin-top: 8px;
+  }
+
+  /* DOWNLOAD */
+  .download-section {
+    background: linear-gradient(135deg, #1a1608, #0d0b05);
+    border-top: 1px solid var(--border);
+    padding: 140px 48px; text-align: center; position: relative; overflow: hidden;
+  }
+  .download-section::before {
+    content: 'GWE'; position: absolute;
+    font-family: 'Bebas Neue', sans-serif; font-size: 400px;
+    color: rgba(232,192,64,0.025); letter-spacing: -20px;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; white-space: nowrap;
+  }
+  .download-inner { max-width: 700px; margin: 0 auto; position: relative; }
+  .download-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 96px); letter-spacing: 6px; color: var(--gold); line-height: 1; margin-bottom: 20px;
+  }
+  .download-sub { font-size: 16px; color: var(--text-dim); margin-bottom: 48px; line-height: 1.7; }
+
+  .download-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  .dl-btn {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 16px 32px; border: 1px solid var(--border);
+    color: var(--text); background: var(--bg-card);
+    cursor: pointer; text-decoration: none; transition: all 0.2s;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  }
+  .dl-btn:hover {
+    border-color: var(--gold-dim); background: rgba(232,192,64,0.06);
+    color: var(--gold); transform: translateY(-3px);
+  }
+  .dl-btn-icon { font-size: 20px; }
+
+  .dl-btn.primary-dl {
+    background: var(--gold); color: var(--bg-deep);
+    border-color: var(--gold); font-size: 17px;
+  }
+  .dl-btn.primary-dl:hover { background: var(--gold-h); border-color: var(--gold-h); color: var(--bg-deep); }
+
+  .windows-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    color: var(--gold-dim); border: 1px solid var(--border);
+    padding: 6px 16px; margin-bottom: 32px; letter-spacing: 2px;
+  }
+
+  /* FOOTER */
+  footer { background: var(--bg-deep); border-top: 1px solid var(--border); padding: 60px 48px 40px; }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 48px;
+  }
+  .footer-brand { max-width: 280px; }
+  .footer-tagline { font-size: 13px; color: var(--text-dim); margin-top: 12px; line-height: 1.6; }
+  .footer-copy { margin-top: 16px; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+  .footer-links h4 { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 3px; color: var(--gold-dim); margin-bottom: 16px; }
+  .footer-links ul { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 13px; color: var(--text-dim); text-decoration: none; transition: color 0.2s; letter-spacing: 1px; }
+  .footer-links a:hover { color: var(--gold); }
+
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), var(--gold-dim), var(--border), transparent); }
+
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    section { padding: 60px 24px; }
+    .mc-section, .partners-section { padding: 60px 24px; }
+    .mc-inner { grid-template-columns: 1fr; gap: 40px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .settings-grid { grid-template-columns: 1fr; }
+    .settings-sidebar { display: flex; overflow-x: auto; padding: 0; }
+    .settings-nav-item { padding: 16px 20px; white-space: nowrap; }
+    .footer-inner { flex-direction: column; }
+    .hero-stats { gap: 32px; }
+    .partners-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-crosshair">
+      <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="14" cy="14" r="12" stroke="#e8c040" stroke-width="1.5" fill="none"/>
+        <circle cx="14" cy="14" r="7" stroke="#a08828" stroke-width="1" fill="none" stroke-dasharray="4 3"/>
+        <line x1="14" y1="2" x2="14" y2="26" stroke="#e8c040" stroke-width="1.2"/>
+        <line x1="2" y1="14" x2="26" y2="14" stroke="#e8c040" stroke-width="1.2"/>
+        <circle cx="14" cy="14" r="3" stroke="#e8c040" stroke-width="1" fill="#1e1b12"/>
+      </svg>
+    </div>
+    <span class="nav-title" data-text="GWE LAUNCHER">GWE LAUNCHER</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#apps">Apps</a></li>
+    <li><a href="#minecraft">Minecraft</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#partners">Partners</a></li>
+    <li><a href="#download">Download</a></li>
+  </ul>
+  <a href="https://drive.usercontent.google.com/download?id=1CKE6wnvDPD1HojCztM4Cps3C0jlsmEsw&export=download&authuser=0&confirm=t&uuid=0180cbe8-ea23-47dc-9104-58ef76d4af05&at=ALBwUgk-4JXxrcwZ-dSison6JpbD:1777824719053" target="_blank" class="btn-primary">
+  ▶ Download Now
+</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">GAME LAUNCHER — V2.0 RELEASE · WINDOWS ONLY</div>
+
+  <div class="hero-logo">
+    <svg class="crosshair-large" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <circle cx="60" cy="60" r="56" stroke="#e8c040" stroke-width="2" fill="none" filter="url(#glow)"/>
+      <circle cx="60" cy="60" r="40" stroke="#a08828" stroke-width="1.2" fill="none" stroke-dasharray="5 4"/>
+      <circle cx="60" cy="60" r="24" stroke="#7a6420" stroke-width="1" fill="none"/>
+      <line x1="60" y1="4" x2="60" y2="116" stroke="#e8c040" stroke-width="1.5" filter="url(#glow)"/>
+      <line x1="4" y1="60" x2="116" y2="60" stroke="#e8c040" stroke-width="1.5" filter="url(#glow)"/>
+      <line x1="60" y1="36" x2="60" y2="84" stroke="#e8c040" stroke-width="3"/>
+      <line x1="36" y1="60" x2="84" y2="60" stroke="#e8c040" stroke-width="3"/>
+      <circle cx="60" cy="60" r="8" stroke="#e8c040" stroke-width="2" fill="none"/>
+      <circle cx="60" cy="60" r="3" fill="#e8c040"/>
+      <line x1="10" y1="20" x2="20" y2="20" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+      <line x1="20" y1="10" x2="20" y2="20" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+      <line x1="110" y1="20" x2="100" y2="20" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+      <line x1="100" y1="10" x2="100" y2="20" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+      <line x1="10" y1="100" x2="20" y2="100" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+      <line x1="20" y1="110" x2="20" y2="100" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+      <line x1="110" y1="100" x2="100" y2="100" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+      <line x1="100" y1="110" x2="100" y2="100" stroke="#e8c040" stroke-width="1.5" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="glitch-wrap" data-text="GWE">GWE</span>
+    <span class="glitch-wrap" data-text="LAUNCHER">LAUNCHER</span>
+  </h1>
+
+  <p class="hero-subtitle">Your Gateway to Gaming</p>
+  <p class="hero-desc">One launcher to rule them all. Launch Minecraft, Roblox, Steam, Epic Games, BlueStacks, and Discord — all from a single, sleek, gold-forged interface.</p>
+
+  <div class="hero-actions">
+    <a href="https://drive.usercontent.google.com/download?id=1CKE6wnvDPD1HojCztM4Cps3C0jlsmEsw&export=download&authuser=0&confirm=t&uuid=0180cbe8-ea23-47dc-9104-58ef76d4af05&at=ALBwUgk-4JXxrcwZ-dSison6JpbD:1777824719053" download class="btn-primary">▶ Download Now</a>
+    <a href="#features" class="btn-secondary">Learn More</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num" id="count-versions">70+</span><span class="stat-label">MC Versions</span></div>
+    <div class="stat"><span class="stat-num">9</span><span class="stat-label">Mod Loaders</span></div>
+    <div class="stat"><span class="stat-num">6</span><span class="stat-label">Platforms</span></div>
+    <div class="stat"><span class="stat-num">1</span><span class="stat-label">Launcher</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- APPS -->
+<section id="apps">
+  <div class="reveal">
+    <div class="section-eyebrow">// SUPPORTED PLATFORMS</div>
+    <h2 class="section-title">Every Game.<br><span>One Place.</span></h2>
+    <p class="section-desc">Stop juggling multiple launchers. GWE detects and launches all your favorite gaming platforms with one click.</p>
+  </div>
+  <div class="apps-grid reveal">
+    <div class="app-card" style="--card-accent: #e8c040">
+      <div class="app-card-tag">JAVA + BEDROCK</div>
+      <span class="app-card-icon">⛏</span>
+      <div class="app-card-name">Minecraft</div>
+      <div class="app-card-desc">Full version selector, mod loader support, RAM allocation, and custom Java path.</div>
+    </div>
+    <div class="app-card" style="--card-accent: #e8312a">
+      <div class="app-card-tag">WIN</div>
+      <span class="app-card-icon">✚</span>
+      <div class="app-card-name">Roblox</div>
+      <div class="app-card-desc">Launch Roblox Player or Studio instantly. Auto-detects your installation path.</div>
+    </div>
+    <div class="app-card" style="--card-accent: #66c0f4">
+      <div class="app-card-tag">REGISTRY</div>
+      <span class="app-card-icon" style="filter:none">🎮</span>
+      <div class="app-card-name">Steam</div>
+      <div class="app-card-desc">Opens your Steam client directly. Registry-based auto-detection included.</div>
+    </div>
+    <div class="app-card" style="--card-accent: #f5af19">
+      <div class="app-card-tag">LAUNCHER</div>
+      <span class="app-card-icon" style="filter:none">◈</span>
+      <div class="app-card-name">Epic Games</div>
+      <div class="app-card-desc">Launch the Epic Games Store with smart path detection across all install locations.</div>
+    </div>
+    <div class="app-card" style="--card-accent: #0077ff">
+      <div class="app-card-tag">EMULATOR</div>
+      <span class="app-card-icon" style="filter:none">📱</span>
+      <div class="app-card-name">BlueStacks</div>
+      <div class="app-card-desc">Boot up your Android emulator for mobile gaming on desktop. BlueStacks 5 & NXT.</div>
+    </div>
+    <div class="app-card" style="--card-accent: #5865f2">
+      <div class="app-card-tag">CHAT</div>
+      <span class="app-card-icon" style="filter:none">💬</span>
+      <div class="app-card-name">Discord</div>
+      <div class="app-card-desc">Jump into voice chat with your squad. GWE finds Discord wherever it's installed.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MINECRAFT -->
+<div class="mc-section" id="minecraft">
+  <div class="mc-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">// MINECRAFT JAVA</div>
+      <h2 class="section-title">Version<br><span>Mastery.</span></h2>
+      <p class="section-desc">Select from 70+ Minecraft versions and 9 mod loaders including Fabric, Forge, NeoForge, OptiFine, and more. Dial in your RAM allocation and go.</p>
+      <div class="loaders-grid">
+        <div class="loader-pill active">Fabric</div>
+        <div class="loader-pill">Forge</div>
+        <div class="loader-pill">NeoForge</div>
+        <div class="loader-pill">OptiFine</div>
+        <div class="loader-pill">Vanilla</div>
+        <div class="loader-pill">Spigot</div>
+        <div class="loader-pill">Bukkit</div>
+        <div class="loader-pill">Paper</div>
+        <div class="loader-pill">Purpur</div>
+      </div>
+    </div>
+    <div class="mc-visual reveal">
+      <div class="mc-window">
+        <div class="mc-titlebar">
+          <div class="mc-dot r"></div>
+          <div class="mc-dot y"></div>
+          <div class="mc-dot g"></div>
+          <span class="mc-titlebar-name">GWE // MINECRAFT JAVA</span>
+        </div>
+        <div class="mc-body">
+          <div class="mc-row">
+            <span class="mc-row-label">VERSION</span>
+            <select class="mc-select">
+              <option>1.21.4</option><option>1.21.1</option><option>1.20.4</option>
+              <option>1.20.1</option><option>1.19.4</option><option>1.18.2</option>
+              <option>1.16.5</option><option>1.12.2</option><option>1.8.9</option>
+            </select>
+          </div>
+          <div class="mc-row">
+            <span class="mc-row-label">LOADER</span>
+            <select class="mc-select">
+              <option>Fabric</option><option>Forge</option><option>NeoForge</option>
+              <option>OptiFine</option><option>Vanilla</option>
+            </select>
+          </div>
+          <div class="mc-row">
+            <span class="mc-row-label">RAM (GB)</span>
+            <select class="mc-select">
+              <option>2</option><option>4</option><option>6</option>
+              <option>8</option><option>12</option><option>16</option>
+            </select>
+          </div>
+          <div class="mc-row">
+            <span class="mc-row-label">USERNAME</span>
+            <input class="mc-select" type="text" value="Player123" placeholder="Your username" style="width:100%"/>
+          </div>
+          <button class="mc-launch-btn">▶ LAUNCH MINECRAFT</button>
+          <div class="mc-console">
+            <div class="mc-console-line"><span class="c-gold">[GWE]</span> Initializing launcher...</div>
+            <div class="mc-console-line"><span class="c-green">[OK]</span> Java detected at JAVA_HOME</div>
+            <div class="mc-console-line"><span class="c-blue">[INF]</span> Loading Fabric 0.16.9 for 1.21.4</div>
+            <div class="mc-console-line"><span class="c-gold">[GWE]</span> Allocated 4GB RAM <span class="cursor-blink"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mc-info-panel">
+        <div class="mc-info-label">DETECTED</div>
+        <div class="mc-info-val">Java 21</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONSOLE -->
+<section id="console" style="padding-top:100px;padding-bottom:100px;">
+  <div class="reveal">
+    <div class="section-eyebrow">// LIVE CONSOLE</div>
+    <h2 class="section-title">Watch It<br><span>Run.</span></h2>
+    <p class="section-desc">A dedicated per-app console streams real-time output. Kill processes or re-launch without leaving the interface.</p>
+  </div>
+  <div class="console-demo reveal">
+    <div class="console-topbar">
+      <div class="console-tab active" onclick="switchTab(this,'mc')">Minecraft</div>
+      <div class="console-tab" onclick="switchTab(this,'rb')">Roblox</div>
+      <div class="console-tab" onclick="switchTab(this,'st')">Steam</div>
+      <div class="console-tab" onclick="switchTab(this,'dc')">Discord</div>
+      <div class="console-status"><div class="status-dot"></div>RUNNING</div>
+    </div>
+    <div class="console-body" id="console-output"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section id="features" style="padding-top:0; max-width:100%; padding-left:0; padding-right:0;">
+  <div style="max-width:1200px; margin:0 auto; padding:100px 48px 48px;">
+    <div class="reveal">
+      <div class="section-eyebrow">// BUILT DIFFERENT</div>
+      <h2 class="section-title">Why <span>GWE?</span></h2>
+    </div>
+  </div>
+  <div class="features-grid reveal">
+    <div class="feature-item">
+      <span class="feature-num">01</span>
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Instant Detection</div>
+      <div class="feature-desc">GWE scans your registry and filesystem to find every installed app automatically — no manual path setup required.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-num">02</span>
+      <span class="feature-icon">🎨</span>
+      <div class="feature-title">Gold Theme Engine</div>
+      <div class="feature-desc">A handcrafted dark-gold palette with glitch-style branding, animated loading screen, and per-app accent colours throughout.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-num">03</span>
+      <span class="feature-icon">🪟</span>
+      <div class="feature-title">Custom Chrome</div>
+      <div class="feature-desc">Frameless window with drag-to-move, 8-direction resize handles, rounded corners on Win11, and a gold DWM border.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-num">04</span>
+      <span class="feature-icon">📺</span>
+      <div class="feature-title">Per-App Consoles</div>
+      <div class="feature-desc">Each application gets its own dedicated console panel with colour-coded output, kill button, and live process status.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-num">05</span>
+      <span class="feature-icon">💾</span>
+      <div class="feature-title">Username History</div>
+      <div class="feature-desc">Saves your last 10 Minecraft usernames locally. Switch accounts in a single click — no re-typing ever again.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-num">06</span>
+      <span class="feature-icon">⚙️</span>
+      <div class="feature-title">Full Settings Panel</div>
+      <div class="feature-desc">General, Minecraft, Appearance, and Advanced tabs. Tweak everything from auto-detection to window themes and Java warnings.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SETTINGS PREVIEW -->
+<section id="settings">
+  <div class="reveal">
+    <div class="section-eyebrow">// PREFERENCES</div>
+    <h2 class="section-title">Your Setup,<br><span>Your Rules.</span></h2>
+    <p class="section-desc">Fine-tune every aspect of the launcher — from Java paths to theme preferences and RAM allocation defaults.</p>
+  </div>
+  <div class="settings-grid reveal">
+    <div class="settings-sidebar">
+      <div class="settings-nav-item active" onclick="setSettingsTab(this)">General</div>
+      <div class="settings-nav-item" onclick="setSettingsTab(this)">Minecraft</div>
+      <div class="settings-nav-item" onclick="setSettingsTab(this)">Appearance</div>
+      <div class="settings-nav-item" onclick="setSettingsTab(this)">Advanced</div>
+    </div>
+    <div class="settings-content">
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-name">Auto-detect Applications</div><div class="setting-hint">Scan registry and filesystem on startup</div></div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-name">Show Console on Launch</div><div class="setting-hint">Automatically switch to console view when a game starts</div></div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-name">Animated Loading Screen</div><div class="setting-hint">Show the GWE splash screen with progress animation</div></div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-name">Save Username History</div><div class="setting-hint">Remember up to 10 recently used Minecraft usernames</div></div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-name">Rounded Window Corners</div><div class="setting-hint">Use DWM rounded corners on Windows 11</div></div>
+        <div class="toggle" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-name">Gold Border Accent</div><div class="setting-hint">Apply gold DWM border colour on Windows 11</div></div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PARTNERS -->
+<div class="partners-section" id="partners">
+  <div class="partners-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">// THE TEAM BEHIND GWE</div>
+      <h2 class="section-title">Our <span>Partners.</span></h2>
+      <p class="section-desc">The people who built, designed, and brought GWE Launcher to life.</p>
+    </div>
+
+    <div class="partners-grid">
+
+      <!-- Creator -->
+      <div class="partner-card reveal" style="--partner-accent: #e8c040" data-role="CREATOR">
+        <div class="partner-role-tag">Creator</div>
+        <div class="partner-avatar">V</div>
+        <div class="partner-name"><span>Vaishnav</span></div>
+        <div class="partner-handle">// Grand World Entertainment</div>
+        <div class="partner-desc">
+          Designed, developed, and shipped GWE Launcher from the ground up. Built the entire launcher — UI, engine, mod loader support, console system, and the gold theme that ties it all together.
+        </div>
+      </div>
+
+      <!-- Website Hoster -->
+      <div class="partner-card reveal" style="--partner-accent: #4fa3d4" data-role="HOST">
+        <div class="partner-role-tag">Website Hoster</div>
+        <div class="partner-avatar" style="border-color:#4fa3d4; color:#4fa3d4">T</div>
+        <div class="partner-name"><span style="color:#4fa3d4">Tanishq</span></div>
+        <div class="partner-handle">// Infrastructure & Hosting</div>
+        <div class="partner-desc">
+          Powers and maintains the GWE Launcher website. Keeps the download live, the site fast, and everything running smoothly so players can always get the launcher.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- DOWNLOAD -->
+<div class="download-section" id="download">
+  <div class="download-inner">
+    <div class="section-eyebrow" style="text-align:center; margin-bottom:20px;">// FREE. WINDOWS. YOURS.</div>
+    <h2 class="download-title">Ready To<br>Play?</h2>
+    <p class="download-sub">GWE Launcher is completely free and built for Windows. Download the zip, extract it, run the Python script, and you're in. No installer bloat, no account required.</p>
+
+    <div class="windows-badge">
+      🪟 &nbsp; WINDOWS ONLY &nbsp; · &nbsp; Python 3.8+ Required
+    </div>
+
+    <div class="download-buttons">
+      <a href="https://drive.usercontent.google.com/download?id=1CKE6wnvDPD1HojCztM4Cps3C0jlsmEsw&export=download&authuser=0&confirm=t&uuid=0180cbe8-ea23-47dc-9104-58ef76d4af05&at=ALBwUgk-4JXxrcwZ-dSison6JpbD:1777824719053" target="_blank" class="btn-primary">
+  ▶ Download Now
+</a>
+      </a>
+    </div>
+    <p style="margin-top:24px; font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--text-dim); letter-spacing:2px;">Requires Python 3.8+ · Tkinter · Optional: Pillow</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <svg width="22" height="22" viewBox="0 0 28 28">
+          <circle cx="14" cy="14" r="12" stroke="#e8c040" stroke-width="1.5" fill="none"/>
+          <line x1="14" y1="2" x2="14" y2="26" stroke="#e8c040" stroke-width="1.2"/>
+          <line x1="2" y1="14" x2="26" y2="14" stroke="#e8c040" stroke-width="1.2"/>
+          <circle cx="14" cy="14" r="3" stroke="#e8c040" stroke-width="1" fill="#13110b"/>
+        </svg>
+        <span style="font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:var(--gold);">GWE LAUNCHER</span>
+      </div>
+      <p class="footer-tagline">The gold standard for gaming launchers. One app, all your games, zero hassle.</p>
+      <p class="footer-copy">© 2026 GWE Launcher · Grand World Entertainment</p>
+      
+      <ul>
+        <li><a href="https://www.youtube.com/@grandworldentertainment" target="_blank" class="btn-primary">
+  ▶ YT CHANNEL
+</a>
+    </div>
+    <div class="footer-links">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#">Minecraft Java</a></li>
+        <li><a href="#">Minecraft Bedrock</a></li>
+        <li><a href="#">Roblox & Studio</a></li>
+        <li><a href="#">Steam</a></li>
+        <li><a href="#">Epic Games</a></li>
+        <li><a href="#">BlueStacks</a></li>
+        <li><a href="#">Discord</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://drive.usercontent.google.com/download?id=1CKE6wnvDPD1HojCztM4Cps3C0jlsmEsw&export=download&authuser=0&confirm=t&uuid=0180cbe8-ea23-47dc-9104-58ef76d4af05&at=ALBwUgk-4JXxrcwZ-dSison6JpbD:1777824719053" target="_blank" class="btn-primary">
+  ▶ Download Now
+</a></li>
+        <li><a href="#">Changelog</a></li>
+        <li><a href="#">Mod Loaders</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Requirements</h4>
+      <ul>
+        <li><a href="#">Windows 10 / 11</a></li>
+        <li><a href="#">Python 3.8+</a></li>
+        <li><a href="#">Tkinter</a></li>
+        <li><a href="#">Pillow (optional)</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Loader pills
+document.querySelectorAll('.loader-pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('.loader-pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+
+// Settings tabs
+function setSettingsTab(el) {
+  document.querySelectorAll('.settings-nav-item').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Console
+const consoleLogs = {
+  mc: [
+    {t:'08:14:02', tag:'INFO', cls:'tag-info', msg:'GWE Launcher started'},
+    {t:'08:14:03', tag:'INFO', cls:'tag-info', msg:'Scanning .minecraft directory...'},
+    {t:'08:14:03', tag:'OK  ', cls:'tag-ok',   msg:'Found 12 installed versions'},
+    {t:'08:14:04', tag:'RUN ', cls:'tag-run',  msg:'Launching fabric-loader-0.16.9-1.21.4'},
+    {t:'08:14:04', tag:'INFO', cls:'tag-info', msg:'Allocated 4096MB heap'},
+    {t:'08:14:05', tag:'OK  ', cls:'tag-ok',   msg:'Java 21.0.2 at C:\\Program Files\\Java\\jdk-21\\bin\\java.exe'},
+    {t:'08:14:06', tag:'RUN ', cls:'tag-run',  msg:'Starting Minecraft 1.21.4...'},
+    {t:'08:14:08', tag:'OK  ', cls:'tag-ok',   msg:'Client process started (PID 4892)'},
+    {t:'08:14:09', tag:'INFO', cls:'tag-info', msg:'Fabric Loader 0.16.9 initialized'},
+    {t:'08:14:10', tag:'OK  ', cls:'tag-ok',   msg:'Minecraft window visible — enjoy!'},
+  ],
+  rb: [
+    {t:'09:01:11', tag:'INFO', cls:'tag-info', msg:'Scanning Roblox install paths...'},
+    {t:'09:01:11', tag:'OK  ', cls:'tag-ok',   msg:'Found RobloxPlayerBeta.exe'},
+    {t:'09:01:12', tag:'RUN ', cls:'tag-run',  msg:'Launching Roblox Player'},
+    {t:'09:01:13', tag:'OK  ', cls:'tag-ok',   msg:'Roblox started (PID 7231)'},
+  ],
+  st: [
+    {t:'10:33:44', tag:'INFO', cls:'tag-info', msg:'Checking Steam registry key...'},
+    {t:'10:33:44', tag:'OK  ', cls:'tag-ok',   msg:'Steam found at C:\\Program Files (x86)\\Steam\\steam.exe'},
+    {t:'10:33:45', tag:'RUN ', cls:'tag-run',  msg:'Starting Steam client'},
+    {t:'10:33:46', tag:'OK  ', cls:'tag-ok',   msg:'Steam process active (PID 2048)'},
+  ],
+  dc: [
+    {t:'11:00:01', tag:'INFO', cls:'tag-info', msg:'Locating Discord installation...'},
+    {t:'11:00:01', tag:'OK  ', cls:'tag-ok',   msg:'Discord Update.exe found in LOCALAPPDATA'},
+    {t:'11:00:02', tag:'RUN ', cls:'tag-run',  msg:'Launching Discord'},
+    {t:'11:00:04', tag:'OK  ', cls:'tag-ok',   msg:'Discord running — voice ready'},
+  ],
+};
+
+function renderConsole(key) {
+  const out = document.getElementById('console-output');
+  out.innerHTML = '';
+  consoleLogs[key].forEach((l, i) => {
+    const div = document.createElement('div');
+    div.className = 'cl';
+    div.style.opacity = '0';
+    div.style.transition = `opacity 0.3s ${i * 0.08}s`;
+    div.innerHTML = `<span class="cl-time">${l.t}</span><span class="cl-tag ${l.cls}">[${l.tag}]</span><span class="cl-msg">${l.msg}</span>`;
+    out.appendChild(div);
+    requestAnimationFrame(() => requestAnimationFrame(() => div.style.opacity = '1'));
+  });
+}
+
+function switchTab(el, key) {
+  document.querySelectorAll('.console-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderConsole(key);
+}
+
+renderConsole('mc');
+
+// Marquee
+const versions = ['26.2','1.21.4','1.21.1','1.20.6','1.20.4','1.20.1','1.19.4','1.18.2','1.17.1','1.16.5','1.15.2','1.14.4','1.12.2','1.8.9','1.7.10','1.0'];
+const loaders  = ['Fabric','Forge','NeoForge','OptiFine','Vanilla','Spigot','Paper','Purpur','Bukkit'];
+
+function buildMarquee() {
+  const track = document.getElementById('marquee');
+  const items = [];
+  versions.forEach(v => items.push(`<span class="marquee-item">MC <span class="sep">·</span> ${v}</span>`));
+  loaders.forEach(l => items.push(`<span class="marquee-item">${l.toUpperCase()}</span>`));
+  const full = items.join('') + items.join('');
+  track.innerHTML = full;
+}
+buildMarquee();
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+// Counter
+function animateCount(el, target, suffix='') {
+  let cur = 0; const step = Math.ceil(target / 50);
+  const iv = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    el.textContent = cur + suffix;
+    if (cur >= target) clearInterval(iv);
+  }, 30);
+}
+const countEl = document.getElementById('count-versions');
+const countObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) { animateCount(countEl, 70, '+'); countObs.disconnect(); }
+}, { threshold: 0.5 });
+countObs.observe(countEl);
+</script>
+</body>
+</html>
